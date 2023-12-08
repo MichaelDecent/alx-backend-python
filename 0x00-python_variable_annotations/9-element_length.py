@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
-"""Annotate the below function’s parameters and return
-values with the appropriate types
-
-def element_length(lst):
-    return [(i, len(i)) for i in lst]
-
-{'lst': typing.Iterable[typing.Sequence], 'return': \
-    typing.List[typing.Tuple[typing.Sequence, int]]}
+"""Write a type-annotated function to_kv that takes a string k
+and an int OR float v as arguments and returns a tuple.The first
+element of the tuple is the string k. The second element is the
+square of the int/float v and should be annotated as a float.
 """
 
 
 import typing
 
 
-def element_length(
-    lst: typing.Iterable[typing.Sequence],
-) -> typing.List[typing.Tuple[typing.Sequence, int]]:
-    """Returns a list of tuples"""
-    return [(i, len(i)) for i in lst]
+def to_kv(k: str, v: typing.Union[int, float]) -> typing.Tuple[str, float]:
+    """returns a tuple of the string & square of v as float"""
+    return (k, float(v * v))
