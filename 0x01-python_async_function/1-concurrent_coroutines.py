@@ -12,14 +12,17 @@ wait_random = __import__("0-basic_async_syntax").wait_random
 
 async def wait_n(n: int, max_delay: int) -> typing.List[float]:
     """
-    Spawn wait_random n times and returns the list of all the delays (float values)
+    Spawn wait_random n times and returns the list
+    of all the delays (float values)
     """
-    delay_list = await asyncio.gather(*(wait_random(max_delay) for _ in range(n)))
+    delay_list = await asyncio.gather(
+        *(wait_random(max_delay) for _ in range(n)))
     for i in range(len(delay_list) - 1):
         swapped = False
         for j in range(0, len(delay_list) - i - 1):
             if delay_list[j] > delay_list[j + 1]:
-                delay_list[j], delay_list[j + 1] = delay_list[j + 1], delay_list[j]
+                delay_list[j], delay_list[j + 1] = \
+                    delay_list[j + 1], delay_list[j]
                 swapped = True
         if not swapped:
             break
