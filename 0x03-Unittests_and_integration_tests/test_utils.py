@@ -2,10 +2,17 @@
 """
 This Module contain a unit test for access_nested_map
 """
-from utils import access_nested_map
-from unittest import TestCase
+from utils import access_nested_map, get_json, memoize
+from unittest import TestCase, mock
 from parameterized import parameterized
-from typing import Mapping, Sequence, Union, Dict
+from typing import (
+        Mapping,
+        Sequence,
+        Any,
+        Dict,
+        Callable,
+        Union
+    )
 
 
 class TestAccessNestedMap(TestCase):
@@ -46,3 +53,53 @@ class TestAccessNestedMap(TestCase):
         with self.assertRaises(type(expected_exception)) as context:
             access_nested_map(nested_map, path)
         self.assertEqual(str(context.exception), str(expected_exception))
+
+
+class TestGetJson(TestCase):
+    """
+    contains test function for the get_json method
+    """
+    @parameterized.expand(
+        [
+            ("http://example.com", {"payload": True}),
+            ("http://holberton.io", {"payload": False}),
+        ]
+    )
+    @mock.patch('utils.requests.get')
+    def test_get_json(
+            self,
+            test_url: str,
+            test_payload: Dict,
+            mock_requests_get: Any) -> None:
+        """
+        """
+        mock_response = mock_requests_get.return_value
+        mock_response.json.return_value = test_payload
+
+        self.assertEqual(get_json(test_url), test_payload)
+        mock_requests_get.assert_called_once_with(test_url)
+
+
+class TestMemoize(TestCase):
+    """The test fixture for testing memoize method in utils module.
+    patch.object is used to replace methods of a class instance
+    with mock temporarily."""
+    def test_memoize(self) -> None:
+        """Test the memoize function"""
+        class TestClass:
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with mock.patch.object(
+                TestClass,
+                'a_method',
+                ) as patch_obj:
+            patch_obj.return_value = 42
+            test_class = TestClass()
+            self.assertEqual(test_class.a_property, 42)
+            self.assertEqual(test_class.a_property, 42)
+            patch_obj.assert_called_once()
