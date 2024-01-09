@@ -81,9 +81,11 @@ class TestGetJson(TestCase):
 
 
 class TestMemoize(TestCase):
-    """The test fixture for testing memoize method in utils module.
+    """
+    constain a test fuction for memorize method in utils module.
     patch.object is used to replace methods of a class instance
-    with mock temporarily."""
+    with mock temporarily.
+    """
     def test_memoize(self) -> None:
         """Test the memoize function"""
         class TestClass:
@@ -93,7 +95,7 @@ class TestMemoize(TestCase):
             @memoize
             def a_property(self):
                 return self.a_method()
-    
+
         with mock.patch.object(TestClass, 'a_method') as mock_a_method:
             mock_a_method.return_value = 42
             test_class = TestClass()
